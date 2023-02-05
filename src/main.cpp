@@ -30,12 +30,16 @@ void loop() {
         cnt++;
         Serial.println(cnt);
     }
-
-    if(cnt&0b100){//RED
-
+    if(cnt>0b111){
+        cnt=0b000;
     }
 
     int value = map(analogRead(LDR),0,4095,0,255);
 
+
+    ledcWrite(0, cnt&0b100==0b100?value:0);//RED
+    ledcWrite(1, cnt&0b010==0b010?value:0);//YELLOW
+    ledcWrite(2, cnt&0b001==0b001?value:0);//
+    
 
 }
