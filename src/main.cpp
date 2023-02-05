@@ -35,4 +35,7 @@ void loop() {
 
     }
 
+    int value = map(analogRead(LDR),0,4095,0,255);
+
+
 }
