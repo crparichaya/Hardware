@@ -20,6 +20,8 @@ void setup() {
 
     ledcSetup(0, 5000, 8);
     ledcAttachPin(GREEN, 0);
+    ledcAttachPin(RED,0);
+    ledcAttachPin(YELLOW,0);
 }
 
 void loop() {
