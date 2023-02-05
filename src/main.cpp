@@ -31,18 +31,22 @@ void loop() {
     debouncer.update();
     if ( debouncer.fell() ) { 
         cnt++;
-
-    if(cnt>0b111){
-        cnt=0b000;
-      
-    }
+        if(cnt>0b111){
+            cnt=0b000;
+        
+        }
     Serial.println(cnt);
     }
     
 
-    int value = map(analogRead(LDR),0,4095,0,255);
+
+    int value = map(analogRead(LDR),3500,4095,0,255);
+    if (value<0){
+        value = 0;
+    }
     Serial.println(value);
-    delay(100);
+    delay(5);
+
 
 
     ledcWrite(0, (cnt&0b100)==0b100?value:0);//RED
