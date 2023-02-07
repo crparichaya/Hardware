@@ -26,6 +26,7 @@ void task_Button(void *param){
 }
 
 void setup() {
+    Serial.begin(115200);
     pinMode(RED,OUTPUT);
     xTaskCreatePinnedToCore(task_LED, "task_LED", 1000, NULL, 1, &TaskLED, 0);
     xTaskCreatePinnedToCore(task_Button, "task_Button", 1000, NULL, 1, &TaskButton, 1);
