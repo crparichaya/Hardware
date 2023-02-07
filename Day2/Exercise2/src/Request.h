@@ -7,20 +7,20 @@ const String baseUrl = "https://exceed-hardware-stamp465.koyeb.app/leddelay";
 
 
 int GET_Delay(){
-    DynamicJsonDocument doc(1024);
+    DynamicJsonDocument doc(65536);
     HTTPClient http;
     const String url=baseUrl;
     http.begin(url);
     Serial.println("Getting Delay value");
+    int delay=-1;
     int httpCode = http.GET();
     if (httpCode>=200&&httpCode<300) {
         String payload = http.getString();
         Serial.println(payload);
         deserializeJson(doc, payload);
-        int delay = doc["value"];
-        return delay;
+        delay = doc["value"];
     }
-    http.end();
+    return delay;
 }
 void Connect_Wifi(){
     WiFi.begin("OPPO_KUY", "oppopass");
