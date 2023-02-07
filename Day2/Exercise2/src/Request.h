@@ -4,20 +4,19 @@
 #include <WiFi.h>
 
 
-const String baseUrl = "https://exceed-hardware-stamp465.koyeb.app/leddelay";
+const String baseUrl = "https://exceed-hardware-stamp465.koyeb.app";
 
 
 int GET_Delay(){
-    DynamicJsonDocument doc(65536);
+    DynamicJsonDocument doc(2048);
     HTTPClient http;
-    const String url=baseUrl;
+    const String url=baseUrl+"/leddelay";
     http.begin(url);
     Serial.println("Getting Delay value");
     int delay=-1;
     int httpCode = http.GET();
     if (httpCode>=200&&httpCode<300) {
         String payload = http.getString();
-        Serial.println(payload);
         deserializeJson(doc, payload);
         delay = doc["value"];
     }
