@@ -1,5 +1,7 @@
 #include <Arduino.h>
 #include <Bounce2.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
 
 #define GREEN 27
 #define BUTTON 26
@@ -37,11 +39,66 @@ void Task2(void *param){
     }
 }
 
+const String baseUrl = "https://exceed-hardware-stamp465.koyeb.app/question";
+int a,b;
+String op, questionId;
+TaskHandle_t Task3_get = NULL;
+
+void GET_Task_3(void *param){
+    DynamicJsonDocument doc(1024);
+    HTTPClient http;
+    const String url = baseUrl;
+    http.begin(url);
+
+    Serial.println("response");
+    int httpResponseCode = http.GET();
+    if (httpResponseCode >= 200 && httpResponseCode < 300) {
+        Serial.print("HTTP ");
+        Serial.println(httpResponseCode);
+        String payload = http.getString();
+        deserializeJson(doc, payload);
+
+        // *** write your code here ***
+        // set up JSON
+        Serial.println();
+        Serial.println((int)doc["a"]);
+        Serial.println((int)doc["b"]);
+        Serial.println((const char *)doc["op"]);
+        Serial.println((const char *)doc["questionId"]);
+
+        a = (int)doc["a"];
+        b = (int)doc["b"];
+        op = (const char *)doc["op"];
+        questionId = (const char *)doc["questionId"];
+
+
+    }else{
+        Serial.print("Error ");
+        Serial.println(httpResponseCode);
+    }
+
+    Serial.println("----------------------------------");
+
+}
+
+void Connect_Wifi(){
+    WiFi.begin("OPPO_KUY", "oppopass");
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.println("Connecting to WiFi..");
+    }
+    Serial.println("Connected to the WiFi network");
+    Serial.println(WiFi.localIP());
+}
+
+
 void setup(){
     Serial.begin(115200);
     pinMode(GREEN, OUTPUT);
+    Connect_Wifi();
     xTaskCreatePinnedToCore(Task1, "Task1", 1024*10, NULL, 1, &Task1_t, 0);
-    xTaskCreatePinnedToCore(Task2, "Task2", 1000, NULL, 1, &Task2_t, 0);
+    xTaskCreatePinnedToCore(Task2, "Task2", 1024*10, NULL, 1, &Task2_t, 0);
+    xTaskCreatePinnedToCore(GET_Task_3, "GetTask3", 1024*10, NULL, 1, &Task3_get, 0);
     debouncer.attach(BUTTON, INPUT_PULLUP);
     debouncer.interval(26);
     pinMode(BLUE, OUTPUT);
