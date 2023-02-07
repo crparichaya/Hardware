@@ -13,16 +13,18 @@ TaskHandle_t Task1_t = NULL;
 
 void Task1(void *param){
     int task1_time_stamp=0;
-    bool button_pressed=false;
+    bool LED_on=false;
     while(1){
         debouncer.update();
-        if(debouncer.rose())button_pressed=false;
-        if(debouncer.fell())button_pressed=true;
-
-        if(button_pressed){
-            task1_time_stamp=millis();
-            digitalWrite(GREEN, HIGH);
-        }else if(millis()-task1_time_stamp>5000){
+        if(debouncer.fell()){
+            if(digitalRead(GREEN)==LOW){
+                digitalWrite(GREEN, HIGH);
+                task1_time_stamp=millis();
+            }else{
+                digitalWrite(GREEN, LOW);
+            }
+        }
+        if(millis()-task1_time_stamp>5000){
             digitalWrite(GREEN, LOW);
         }
         vTaskDelay(10/portTICK_PERIOD_MS);
@@ -34,10 +36,9 @@ void Task1(void *param){
 TaskHandle_t Task2_t = NULL;
 void Task2(void *param){
     while(1){
-        digitalWrite(BLUE, 0);
-        vTaskDelay(200/portTICK_PERIOD_MS);
-        digitalWrite(BLUE, 1);
-        vTaskDelay(200/portTICK_PERIOD_MS);
+        int v=sin(millis()/200.0)*127+128;
+        analogWrite(BLUE, v);
+        vTaskDelay(10/portTICK_PERIOD_MS);
     }
 }
 
