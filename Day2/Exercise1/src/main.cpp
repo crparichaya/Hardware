@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <Bounce2.h>
-#define BUTTON 27
+#define BUTTON 26
 
 
 #define RED 12 
@@ -17,13 +17,20 @@ void setup() {
     pinMode(RED,OUTPUT);
     xTaskCreatePinnedToCore(task_LED, "task_LED", 1000, NULL, 1, &TaskLED, 0);
 }
+
+void loop(){
+
+
+}
+
 Bounce debouncer = Bounce();
-void loop() {
-    int cnt = 0;
-    debouncer.update();
-    if ( debouncer.fell() ) { 
-        cnt++;
-        Serial.println(cnt);
+
+void task_LED(void *param){
+    while(1){
+        debouncer.update();
+        if (debouncer.fell()){
+          cnt++
+        }
     }
 }
 
