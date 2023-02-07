@@ -1,11 +1,8 @@
 #include <Arduino.h>
 #include <Bounce2.h>
-#define BUTTON 26
-Bounce debouncer = Bounce();
-int cnt = 0;
 
 #define RED 12 
-
+TaskHandle_t TaskLED=NULL;
 void task_LED(void *param){
     while(1){
         int v=sin(millis()/200.0)*127+128;
@@ -14,8 +11,11 @@ void task_LED(void *param){
     }
 }
 
+#define BUTTON 26
+Bounce debouncer = Bounce();
+int cnt = 0;
 TaskHandle_t TaskButton=NULL;
-void Task_Button(void *param){
+void task_Button(void *param){
     while(1){
         debouncer.update();
         if (debouncer.fell()){
@@ -25,11 +25,10 @@ void Task_Button(void *param){
     }
 }
 
-TaskHandle_t TaskLED=NULL;
 void setup() {
     pinMode(RED,OUTPUT);
     xTaskCreatePinnedToCore(task_LED, "task_LED", 1000, NULL, 1, &TaskLED, 0);
-    xTaskCreatePinnedToCore(Task_Button, "task_Button", 1000, NULL, 1, &TaskLED, 0);
+    xTaskCreatePinnedToCore(task_Button, "task_Button", 1000, NULL, 1, &TaskButton, 1);
     debouncer.attach(BUTTON, INPUT_PULLUP);
     debouncer.interval(26);
 }
