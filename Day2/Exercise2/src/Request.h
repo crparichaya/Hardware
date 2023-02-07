@@ -23,7 +23,7 @@ int GET_Delay(){
     http.end();
 }
 void Connect_Wifi(){
-    WiFi.begin("OPPO_KUY", "obbopass");
+    WiFi.begin("OPPO_KUY", "oppopass");
     while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         Serial.println("Connecting to WiFi..");
