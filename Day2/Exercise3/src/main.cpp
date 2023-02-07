@@ -10,6 +10,7 @@
 
 Bounce debouncer=Bounce();
 TaskHandle_t Task1_t = NULL;
+
 void Task1(void *param){
     int task1_time_stamp=0;
     bool button_pressed=false;
@@ -45,7 +46,8 @@ int a,b;
 String op, questionId;
 TaskHandle_t Task3_get = NULL;
 
-void GET_Task_3(void *param){
+
+void GET_Task3(){
     DynamicJsonDocument doc(1024);
     HTTPClient http;
     const String url = baseUrl;
@@ -92,22 +94,6 @@ void Connect_Wifi(){
     Serial.println(WiFi.localIP());
 }
 
-
-void GET_Task3();
-int a,b;
-String op,questionId;
-TaskHandle_t Task3_t = NULL;
-void Task3(void *param){
-    int time0=millis();
-    while(1){
-        if(millis()-time0>5000){
-            GET_Task3();
-            POST_Task3();
-            time0=millis();
-        }
-        vTaskDelay(10/portTICK_PERIOD_MS);
-    }
-}
 void POST_Task3(){
     String url="https://exceed-hardware-stamp465.koyeb.app/answer";
     String json;
@@ -118,16 +104,16 @@ void POST_Task3(){
 
     DynamicJsonDocument doc(2048);
     doc["questionId"]=questionId;
-    if(doc["op"]=="+"){
+    if(op=="+"){
         doc["result"]=a+b;
     }
-    if(doc["op"]=="-"){
+    if(op=="-"){
         doc["result"]=a-b;
     }
-    if(doc["op"]=="*"){
+    if(op=="*"){
         doc["result"]=a*b;
     }
-    if(doc["op"]=="/"){
+    if(op=="/"){
         doc["result"]=a/b;
     }
     serializeJson(doc,json);
@@ -141,6 +127,18 @@ void POST_Task3(){
     }
 
 }
+TaskHandle_t Task3_t = NULL;
+void Task3(void *param){
+    int time0=millis();
+    while(1){
+        if(millis()-time0>5000){
+            GET_Task3();
+            POST_Task3();
+            time0=millis();
+        }
+        vTaskDelay(10/portTICK_PERIOD_MS);
+    }
+}
 
 void setup(){
     Serial.begin(115200);
@@ -148,7 +146,7 @@ void setup(){
     Connect_Wifi();
     xTaskCreatePinnedToCore(Task1, "Task1", 1024*10, NULL, 1, &Task1_t, 0);
     xTaskCreatePinnedToCore(Task2, "Task2", 1024*10, NULL, 1, &Task2_t, 0);
-    xTaskCreatePinnedToCore(GET_Task_3, "GetTask3", 1024*10, NULL, 1, &Task3_get, 0);
+    xTaskCreatePinnedToCore(Task3, "Task3", 1024*10, NULL, 1, &Task3_t, 0);
     debouncer.attach(BUTTON, INPUT_PULLUP);
     debouncer.interval(26);
     pinMode(BLUE, OUTPUT);
