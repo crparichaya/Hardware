@@ -2,6 +2,7 @@
 #include <Bounce2.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+#include <WiFi.h>
 
 #define GREEN 27
 #define BUTTON 26
@@ -91,6 +92,55 @@ void Connect_Wifi(){
     Serial.println(WiFi.localIP());
 }
 
+
+void GET_Task3();
+int a,b;
+String op,questionId;
+TaskHandle_t Task3_t = NULL;
+void Task3(void *param){
+    int time0=millis();
+    while(1){
+        if(millis()-time0>5000){
+            GET_Task3();
+            POST_Task3();
+            time0=millis();
+        }
+        vTaskDelay(10/portTICK_PERIOD_MS);
+    }
+}
+void POST_Task3(){
+    String url="https://exceed-hardware-stamp465.koyeb.app/answer";
+    String json;
+    HTTPClient http;
+    http.begin(url);
+    http.addHeader("Content-Type", "application/json");
+
+
+    DynamicJsonDocument doc(2048);
+    doc["questionId"]=questionId;
+    if(doc["op"]=="+"){
+        doc["result"]=a+b;
+    }
+    if(doc["op"]=="-"){
+        doc["result"]=a-b;
+    }
+    if(doc["op"]=="*"){
+        doc["result"]=a*b;
+    }
+    if(doc["op"]=="/"){
+        doc["result"]=a/b;
+    }
+    serializeJson(doc,json);
+    int httpCode = http.POST(json);
+    if(httpCode/100==2){
+        Serial.println(http.getString());
+    }else{
+        Serial.println("Error somehow lol");
+        Serial.println(httpCode);
+        Serial.println(http.getString());
+    }
+
+}
 
 void setup(){
     Serial.begin(115200);
