@@ -1,9 +1,19 @@
 #include <Arduino.h>
+#include <Bounce2.h>
+#define BUTTON 27
+
 
 void setup() {
   // put your setup code here, to run once:
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  int cnt = 0;
+  Bounce debouncer = Bounce();
+    debouncer.update();
+    if ( debouncer.fell() ) { 
+        cnt++;
+        Serial.println(cnt);
+    }
 }
+
