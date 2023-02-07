@@ -65,6 +65,7 @@ void setup(){
     Connect_Wifi();
     xTaskCreatePinnedToCore(Blink_LED, "task_LED", 1024*10, NULL, 1, &RedLight, 0);
     xTaskCreatePinnedToCore(Task_delay, "task_DELAY", 1024*10, NULL, 1, &delayy, 0);
+
 }
 
 void loop() {

@@ -3,9 +3,8 @@
 
 #define GREEN 27
 #define BUTTON 26
-
 Bounce debouncer=Bounce();
-
+TaskHandle_t Task1_t = NULL;
 void Task1(void *param){
     int task1_time_stamp=0;
     bool button_pressed=false;
@@ -24,14 +23,30 @@ void Task1(void *param){
     }
 }
 
-void setup() {
-    Serial.begin(115200);
-    pinMode(GREEN, OUTPUT);
-    xTaskCreatePinnedToCore(Task1, "Task1", 1024*10, NULL, 1, NULL, 0);
-    debouncer.attach(BUTTON, INPUT_PULLUP);
-    debouncer.interval(26);
+
+#define BLUE 5
+TaskHandle_t Task2_t = NULL;
+void Task2(void *param){
+    while(1){
+        digitalWrite(BLUE, 0);
+        vTaskDelay(200/portTICK_PERIOD_MS);
+        digitalWrite(BLUE, 1);
+        vTaskDelay(200/portTICK_PERIOD_MS);
+    }
 }
 
-void loop() {
+void setup(){
+    Serial.begin(115200);
+    pinMode(GREEN, OUTPUT);
+    xTaskCreatePinnedToCore(Task1, "Task1", 1024*10, NULL, 1, &Task1_t, 0);
+    xTaskCreatePinnedToCore(Task2, "Task2", 1000, NULL, 1, &Task2_t, 0);
+    debouncer.attach(BUTTON, INPUT_PULLUP);
+    debouncer.interval(26);
+    pinMode(BLUE, OUTPUT);
 
+    
+}
+
+void loop(){
+    
 }
