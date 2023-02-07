@@ -2,9 +2,9 @@
 
 #define BLUE 5
 
-TaskHandle_t TaskA = NULL;
+TaskHandle_t Task2 = NULL;
 
-void Lit_LED(void *param){
+void Task_2(void *param){
     while(1){
         digitalWrite(BLUE, 0);
         vTaskDelay(200/portTICK_PERIOD_MS);
@@ -16,7 +16,7 @@ void Lit_LED(void *param){
 void setup(){
     pinMode(BLUE, OUTPUT);
 
-    xTaskCreatePinnedToCore(Lit_LED, "Builtin_LED", 1000, NULL, 1, &TaskA, 0);
+    xTaskCreatePinnedToCore(Task_2, "Builtin_LED", 1000, NULL, 1, &Task2, 0);
 }
 
 void loop(){
