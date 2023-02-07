@@ -32,9 +32,9 @@ void Task_delay(void *param){
 void setup(){
     Serial.begin(115200);
     pinMode(RED, OUTPUT);
-    Connect_Wifi();
     xTaskCreatePinnedToCore(Blink_LED, "task_LED", 1000, NULL, 1, &RedLight, 0);
-    xTaskCreatePinnedToCore(Task_delay, "task_DELAY", 1000, NULL, 1, &delayy, 1);
+    xTaskCreatePinnedToCore(Task_delay, "task_DELAY", 1000, NULL, 1, &delayy, );
+    Connect_Wifi();
 }
 
 void loop() {

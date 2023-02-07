@@ -1,9 +1,25 @@
 #include <Arduino.h>
 
-void setup() {
-  // put your setup code here, to run once:
+#define BLUE 5
+
+TaskHandle_t TaskA = NULL;
+
+void Lit_LED(void *param){
+    while(1){
+        digitalWrite(BLUE, 0);
+        vTaskDelay(200/portTICK_PERIOD_MS);
+        digitalWrite(BLUE, 1);
+        vTaskDelay(200/portTICK_PERIOD_MS);
+    }
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void setup(){
+    pinMode(BLUE, OUTPUT);
+
+    xTaskCreatePinnedToCore(Lit_LED, "Builtin_LED", 1000, NULL, 1, &TaskA, 0);
 }
+
+void loop(){
+}
+
+
