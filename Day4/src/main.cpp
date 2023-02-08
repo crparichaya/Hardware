@@ -2,7 +2,12 @@
 // Just test touch pin - Touch0 is T0 which is on GPIO 4.
 #include <Arduino.h>
 //T0 not work
-//T3 work
+//T1 max 51 min 0
+//T2 max 55 min 23
+//T3 max 50 min 16
+//T7 max 59 min 14
+
+
 void setup()
 {
   Serial.begin(115200);
