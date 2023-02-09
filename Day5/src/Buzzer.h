@@ -1,5 +1,7 @@
 #include <Arduino.h>
+
 int buzzerPin = 21;
+
 void setup ()
 {
   pinMode (buzzerPin, OUTPUT);
