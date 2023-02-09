@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"name": "MiniProject",
+			"path": "../../../miniProject-hardware/MiniProject"
+		},
+		{
+			"name": "Day4",
+			"path": "../../Day4"
+		},
+		{
+			"name": "Day5",
+			"path": ".."
+		}
+	],
+	"settings": {}
+}

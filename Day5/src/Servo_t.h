@@ -4,7 +4,7 @@
 Servo myservo;
 void setup()
 {
-    myservo.attach(21); // กำหนดขา 9 ควบคุม Servo
+    myservo.attach(9); // กำหนดขา 9 ควบคุม Servo
 }
 void loop()
 {
