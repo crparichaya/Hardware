@@ -6,19 +6,27 @@
 //T2 max 55 min 23
 //T3 max 50 min 16
 //T7 max 59 min 14
-
-
+int cnt=0;
+void click(){
+  cnt++;
+  //Serial.print("click!  ");
+  Serial.print(touchRead(T1));
+  Serial.print(" ");
+  Serial.println(cnt);
+}
 void setup()
 {
   Serial.begin(115200);
-  delay(1000); // give me time to bring up serial monitor
+  //delay(1000); // give me time to bring up serial monitor
+  touchAttachInterrupt(T1, click, 40); // attach interrupt to T0
 }
+
 void loop()
 {
-  Serial.print(touchRead(T3));  // get value using T0
-  Serial.print(" ");
-  Serial.println(millis());
-  delay(100);
+  //Serial.print(touchRead(T0));  // get value using T0
+  //Serial.print(" ");
+  //Serial.println(millis());
+  //delay(100);
 }
 
 //const int ledPin =  26;      // the number of the LED pin
