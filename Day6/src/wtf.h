@@ -3,32 +3,21 @@
 //SimpleFSM kinda good
 
 // States สถานะ (ฟังก์ชันเข้าสถานะ, ฟังก์ชันระหว่างอยู่ในสถานะ, ฟังก์ชันขณะออกจากสถานะ)
-void on_page1_enter();
-void on_page1_state();
-void on_page1_exit();
-void on_page2_enter();
-void on_page2_state();
-void on_page2_exit();
-void on_page3_enter();
-void on_page3_state();
-void on_page3_exit();
-
-
 State state_page1(&on_page1_enter, &on_page1_state, &on_page1_exit);
 State state_page2(&on_page2_enter, &on_page2_state, &on_page2_exit);
 State state_page3(&on_page3_enter, &on_page3_state, &on_page3_exit);
-Fsm fsm(&state_page1);
 
+Fsm fsm(&state_page1);
 
 void on_page1_enter(){
   Serial.println("Page 1");
   //fsm.trigger(edge_id)
 }
 void on_page1_state(){
-  Serial.println("Page 1 performing");
-  fsm.trigger(1);
-  //can't use while(1) because it will block the state machine
-  //note the edge id then break the loop
+  while(1){
+    Serial.println("Page 1 performing");
+    //fsm.trigger(1);
+  }
 }
 void on_page1_exit(){
   Serial.println("Exit Page 1");
@@ -54,8 +43,6 @@ void on_page3_exit(){
   Serial.println("Exit Page 3");
 }
 
-
-
 void setup(){
   Serial.begin(115200);
   //NULL=function to run before leaving the state
@@ -66,8 +53,5 @@ void setup(){
 }
 void loop(){
   fsm.run_machine();
-  delay(500);
+  delay(100);
 }
-
-
-
